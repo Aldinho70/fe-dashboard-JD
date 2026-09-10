@@ -1,0 +1,167 @@
+/* =========================
+   DARK THEME
+   ========================= */
+
+.theme-root .gradient-green {
+  background: linear-gradient(
+    135deg,
+    #00ff77 0%,
+    #087f5b 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-blue {
+  background: linear-gradient(
+    135deg,
+    #0045ff 0%,
+    #1d4ed8 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-purple {
+  background: linear-gradient(
+    135deg,
+    #ff00eb 0%,
+    #9333ea 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-orange {
+  background: linear-gradient(
+    135deg,
+    #ffb900 0%,
+    #f97316 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-temp {
+  background: linear-gradient(
+    135deg,
+    #00fff6 0%,
+    #0891b2 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-sn {
+  background: linear-gradient(
+    135deg,
+    #ff0000 0%,
+    #dc2626 45%,
+    #111827 100%
+  );
+}
+
+.theme-root .gradient-default {
+  background: linear-gradient(
+    135deg,
+    #64748b 0%,
+    #334155 50%,
+    #1e293b 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-default {
+  background: linear-gradient(
+    135deg,
+    #f8fafc 0%,
+    #e2e8f0 50%,
+    #cbd5e1 100%
+  );
+}
+
+/* =========================
+   LIGHT THEME
+   ========================= */
+
+.theme-root[data-theme="light"] .gradient-green {
+  background: linear-gradient(
+    135deg,
+    #00ff77 0%,
+    #86efac 45%,
+    #f0fdf4 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-blue {
+  background: linear-gradient(
+    135deg,
+    #0045ff 0%,
+    #93c5fd 45%,
+    #eff6ff 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-purple {
+  background: linear-gradient(
+    135deg,
+    #ff00eb 0%,
+    #d8b4fe 45%,
+    #faf5ff 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-orange {
+  background: linear-gradient(
+    135deg,
+    #ffb900 0%,
+    #fdba74 45%,
+    #fff7ed 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-temp {
+  background: linear-gradient(
+    135deg,
+    #00fff6 0%,
+    #67e8f9 45%,
+    #ecfeff 100%
+  );
+}
+
+.theme-root[data-theme="light"] .gradient-sn {
+  background: linear-gradient(
+    135deg,
+    #ff0000 0%,
+    #fca5a5 45%,
+    #fef2f2 100%
+  );
+}
+
+
+.button-radio {
+  border-radius: 8px;
+}
+
+.gradient-green,
+.gradient-blue,
+.gradient-purple,
+.gradient-orange,
+.gradient-temp,
+.gradient-sn {
+  position: relative;
+  isolation: isolate;
+}
+
+.gradient-green::before,
+.gradient-blue::before,
+.gradient-purple::before,
+.gradient-orange::before,
+.gradient-temp::before,
+.gradient-sn::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -100px;
+  right: -60px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  filter: blur(35px);
+  pointer-events: none;
+  z-index: -1;
+}

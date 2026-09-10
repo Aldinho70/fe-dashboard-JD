@@ -1,0 +1,7 @@
+.theme-root .gradient-green {
+  background: linear-gradient(185deg, #3DF407, #E0D8D7);
+}
+
+.theme-root[data-theme="light"] .gradient-green {
+  background: linear-gradient(185deg, #FF9800, #E0D8D7);
+}

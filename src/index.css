@@ -1,5 +1,59 @@
 @import "tailwindcss";
+@import "../src/components/Dashboard/Dashboard.css";
+/* @import "../src/components/ui/ButtonOperation/ButtonOperation.css"; */
+@import "../src/components/ui/ButtonOperation/ButtonOperationGlass.css";
+
+:root {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+.theme-root {
+  --app-background: #111827;
+  --app-text: #f3f4f6;
+  --surface-panel: rgba(32, 33, 34, 0.75);
+  --surface-card: rgba(30, 41, 59, 0.8);
+  --surface-table: rgba(2, 6, 23, 0.5);
+  --surface-table-header: rgba(30, 41, 59, 0.95);
+  --border-subtle: rgba(71, 85, 105, 0.8);
+  --border-muted: #1e293b;
+  --accent: #e8931c;
+  --accent-soft: rgba(242, 189, 75, 0.1);
+  --muted-text: #cbd5e1;
+  --status: #86efac;
+  --status-soft: rgba(74, 222, 128, 0.1);
+  --status-border: rgba(74, 222, 128, 0.2);
+  min-height: 100vh;
+  color: var(--app-text);
+  background: var(--app-background);
+}
+
+.theme-root[data-theme="light"] {
+  --app-background: #f3f4f6;
+  --app-text: #1f2937;
+  --surface-panel: rgba(255, 255, 255, 0.9);
+  --surface-card: #ffffff;
+  --surface-table: rgba(255, 255, 255, 0.92);
+  --surface-table-header: #e5e7eb;
+  --border-subtle: #d1d5db;
+  --border-muted: #e5e7eb;
+  --accent: #e8931c;
+  --accent-soft: rgba(154, 104, 16, 0.1);
+  --muted-text: #4b5563;
+  --status: #15803d;
+  --status-soft: rgba(22, 163, 74, 0.1);
+  --status-border: rgba(22, 163, 74, 0.25);
+}
 
 body {
   margin: 0;
+  overflow: hidden;
+  min-width: 320px;
+  background: var(--app-background, #111827);
+}
+
+button,
+a {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }

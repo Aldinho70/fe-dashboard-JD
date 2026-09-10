@@ -5,7 +5,7 @@ import ThemeContext from "./ThemeContext";
 import { lightTheme, darkTheme } from "./theme";
 
 function ThemeProvider({ children }) {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   const theme = darkMode ? darkTheme : lightTheme;
 
@@ -20,7 +20,11 @@ function ThemeProvider({ children }) {
         toggleTheme,
       }}
     >
-      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
+        <div data-theme={darkMode ? "dark" : "light"} className="theme-root">
+          {children}
+        </div>
+      </MuiThemeProvider>
     </ThemeContext.Provider>
   );
 }

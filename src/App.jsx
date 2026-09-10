@@ -5,7 +5,7 @@ function App() {
     return (
     <ThemeProvider>
       <AppRoutes />
-        </ThemeProvider>
+    </ThemeProvider>
     );
 }
 
