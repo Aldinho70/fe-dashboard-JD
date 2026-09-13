@@ -1,5 +1,4 @@
-
-.parent {
+/* .parent {
     display: grid;
     grid-template-columns: repeat(5, .5fr);
     grid-template-rows: repeat(4, .24fr);
@@ -29,7 +28,7 @@
     grid-row-start: 3;
     width: stretch;
 }
-        
+         */
 .visually-hidden{
     visibility: hidden;
 }
