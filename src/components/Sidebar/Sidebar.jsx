@@ -37,7 +37,7 @@ export default function Sidebar() {
             {/* Brand */}
             <div className="flex flex-row items-center gap-3">
               <img
-                src="http://ws4cjdg.com/JD.INTEGRACIONES.COM/img/logojd.png"
+                src="../logojd.png"
                 width="50"
                 alt="Logo Jornada Digital"
                 className="rounded-lg p-1 shadow-md shadow-amber-400/10"
