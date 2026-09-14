@@ -19,6 +19,16 @@ class ApiJdService {
         }
     }
 
+    async getGroup ( group = "all" ) {
+        const url = `${this.BASE_URL_API_JD}getGroups/${this.TOKEN_DFN}?group=${group}`;
+        try {
+            const response = await AxiosService.get( url );
+            return response
+        } catch (error) {
+            throw this.handleError( error )
+        }
+    }
+
     async getUnitsOfflineByGroup ( group = "all" ) {
         const url = `${this.BASE_URL_API_JD}getStatusConectionsGroups/${group}/${this.TOKEN_DFN}`;
         try {
@@ -28,6 +38,7 @@ class ApiJdService {
             throw this.handleError(error);
         }
     }
+
 }
 
 export default new ApiJdService();

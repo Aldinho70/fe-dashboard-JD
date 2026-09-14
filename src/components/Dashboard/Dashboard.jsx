@@ -1,15 +1,16 @@
 import { useState } from "react";
-import TableUnits, { defaultColumns, defaultRows } from "../ui/TableUnits/TableUnits.jsx";
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import useUnitsOffline from "../../hooks/useCountOffline.js";
+import dashboardHelper from "../../helpers/Dashboard.helper.js";
 import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
 import OperationGroups from "../OperationGroups/OperationGroups.jsx";
 import ButtonOperation from "../ui/ButtonOperation/ButtonOperation.jsx"
+import TableUnits from "../ui/TableUnits/TableUnits.jsx";
 
 function Dashboard() {
-  const [tableRows, setTableRows] = useState(defaultRows);
-  const [tableColumns, setTableColumns] = useState(defaultColumns);
+  const [tableRows, setTableRows] = useState([]);
+  const [tableColumns, setTableColumns] = useState([]);
   const [selectedOperation, setSelectedOperation] = useState("Noelie > unidades sin conexion");
   const { countUnits, loading: loadCountUnis, error: errCountUnits } = useCountUnitsGroups();
   const { unitsOffline: offlineNoelie } = useUnitsOffline('NOELIE');
@@ -17,10 +18,10 @@ function Dashboard() {
   const { unitsOffline: offlineDifDobles } = useUnitsOffline('00-DIFEYRO SEGURIDAD');
   const { unitsOffline: offlineFilsa } = useUnitsOffline('FILSA');
 
-  const handleClick = ( nameOperation, nameGroup, /*rows = defaultRows, columns = defaultColumns,*/ ) => {
-    const rows = [
-      { unit: nameGroup, lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-    ];
+  const handleClick = async ( nameOperation, nameGroup, data = null /*rows = defaultRows, columns = defaultColumns,*/ ) => {
+
+    const { rows, columns } = await dashboardHelper.createContentTable( nameOperation, nameGroup, data );
+
     setSelectedOperation(`${nameGroup} > ${nameOperation}`);
     setTableRows(rows);
     setTableColumns(columns);
@@ -34,19 +35,19 @@ function Dashboard() {
         {/* Noelie */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Noelie"}>
-            <ButtonOperation nameOperation={"Noelie"} length={ countUnits["NOELIE"]  || 0} gradientClass="gradient-green" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("Noelie", "Noelie")}/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineNoelie.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("unidades sin conexion", "Noelie")} />
-            <ButtonOperation nameOperation={"Desviados"} length={ countUnits["Z - DESVIADOS NOELIE"] } gradientClass="gradient-blue" type="desv" onClick={() => handleClick("Desviados", "Noelie")}/>
-            <ButtonOperation nameOperation={"Temperatura"} length={0} gradientClass="gradient-temp"type="tem" onClick={() => handleClick("Temperatura", "Noelie")}/>
+            <ButtonOperation nameOperation={"Noelie"} length={ countUnits["NOELIE"]  || 0} gradientClass="gradient-green" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("General", "NOELIE")}/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineNoelie.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("Unidades sin conexion", "Noelie", offlineNoelie)} />
+            <ButtonOperation nameOperation={"Desviados"} length={ countUnits["Z - DESVIADOS NOELIE"] } gradientClass="gradient-blue" type="desv" onClick={() => handleClick("Desviados", "Z - DESVIADOS NOELIE")}/>
+            <ButtonOperation nameOperation={"Temperatura"} length={0} gradientClass="gradient-temp"type="tem" onClick={() => handleClick("Temperatura", "NOELIE")}/>
           </OperationGroups>
         </div>
 
         {/* Difeyro */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Difeyro"}>
-            <ButtonOperation nameOperation={"Difeyro"} length={ countUnits["DIFEYRO"] || 0 } gradientClass="gradient-purple" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("Difeyro", "Difeyro")}/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineDifeyro.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("unidades sin conexion", "Difeyro")} />
-            <ButtonOperation nameOperation={"Dobles S/R"} length={ offlineDifDobles.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("Dobles S/R", "Difeyro")} />
+            <ButtonOperation nameOperation={"Difeyro"} length={ countUnits["DIFEYRO"] || 0 } gradientClass="gradient-purple" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("General", "DIFEYRO")}/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineDifeyro.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("unidades sin conexion", "Difeyro", offlineDifeyro)} />
+            <ButtonOperation nameOperation={"Dobles S/R"} length={ offlineDifDobles.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("Dobles S/R", "Difeyro", offlineDifDobles)} />
             <div className="visually-hidden">
               <ButtonOperation nameOperation={""} length={""} />
             </div>
@@ -56,9 +57,9 @@ function Dashboard() {
         {/* Filsa */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Filsa"}>
-            <ButtonOperation nameOperation={"Filsa"} length={ countUnits["FILSA"] || 0}  gradientClass="gradient-orange" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("Filsa", "Filsa")}/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineFilsa.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("unidades sin conexion", "Filsa")} />
-            <ButtonOperation nameOperation={"Desviados"} length={0} gradientClass="gradient-blue" type="desv" onClick={() => handleClick("Desviados", "Filsa")}/>
+            <ButtonOperation nameOperation={"Filsa"} length={ countUnits["FILSA"] || 0}  gradientClass="gradient-orange" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png" onClick={() => handleClick("General", "FILSA")}/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineFilsa.length ?? 0 } gradientClass="gradient-sn" type="offline" onClick={() => handleClick("unidades sin conexion", "Filsa", offlineFilsa)} />
+            <ButtonOperation nameOperation={"Desviados"} length={0} gradientClass="gradient-blue" type="desv" onClick={() => handleClick("Desviados", "FILSA_desviados")}/>
             <div className="visually-hidden">
               <ButtonOperation nameOperation={""} length={""} />
             </div>
@@ -104,7 +105,7 @@ function Dashboard() {
                 <FilterAltIcon />
                 Mostrando:
                 <span className="font-bold" >{`${selectedOperation}:`}</span>
-                <span className="font-bold text-red-600 bg-red-200 px-2 rounded-xl" >{tableRows.length} unidades</span>
+                <span className="font-bold text-red-600 bg-red-200 px-2 rounded-xl" >{tableRows?.length ?? 0} unidades</span>
               </span>
 
             </div>
