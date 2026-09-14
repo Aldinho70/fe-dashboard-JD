@@ -7,30 +7,11 @@ const defaultColumns = [
 ];
 
 const defaultRows = [
-  { unit: "Unidad 1", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 2", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 3", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 4", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 5", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 6", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 7", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 8", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 1", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 2", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 3", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 4", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 5", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 6", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 7", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 8", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 1", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 2", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 3", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 4", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 5", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 6", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 7", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Unidad 8", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
+  { unit: "Default 1", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
+  { unit: "Default 2", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
+  { unit: "Default 3", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
+  { unit: "Default 4", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
+  { unit: "Default 5", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
 ];
 
 const alignmentClasses = {
