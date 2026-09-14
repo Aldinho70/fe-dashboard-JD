@@ -5,7 +5,8 @@ import AltRouteIcon from '@mui/icons-material/AltRoute';
 import Brightness1Icon from '@mui/icons-material/Brightness1';
 import ThermostatTwoToneIcon from '@mui/icons-material/ThermostatTwoTone';
 
-function CardOperation({ nameOperation, length, gradientClass = "", onClick, type="", img = null}) {
+function CardOperation({ id, nameOperation, length, gradientClass = "", onClick, type="", img = null}) {
+
   const operationTypes = {
     offline: {
       icon: <BusAlertIcon />,
@@ -37,6 +38,7 @@ function CardOperation({ nameOperation, length, gradientClass = "", onClick, typ
   return (
     <Button onClick={onClick}
       className={`w-full cursor-pointer overflow-hidden p-0 !rounded-2xl text-[var(--app-text)] shadow-lg shadow-slate-950/20 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/50 hover:shadow-amber-950/40 button-radio ${(gradientClass) && gradientClass || 'gradient-default' }`}
+      id={id}
     >
       <div className="flex w-full items-center gap-2 px-3 py-2">
         <div className="flex flex-row justify-start gap-1" >

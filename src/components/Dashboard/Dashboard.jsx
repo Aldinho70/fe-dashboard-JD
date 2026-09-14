@@ -13,7 +13,7 @@ import ButtonOperation from "../ui/ButtonOperation/ButtonOperation.jsx";
 function Dashboard() {
   const [tableRows, setTableRows] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
-  const [selectedOperation, setSelectedOperation] = useState( "Noelie > unidades sin conexion",);
+  const [selectedOperation, setSelectedOperation] = useState("");
   const { countUnits } = useCountUnitsGroups();
   const { unitsOffline: offlineNoelie } = useUnitsOffline("NOELIE");
   const { unitsOffline: offlineDifeyro } = useUnitsOffline("DIFEYRO");
@@ -23,27 +23,31 @@ function Dashboard() {
 
   const { dataHRH } = useCountHRH();
 
-  const handleClickNDF = async (
-    nameOperation,
-    nameGroup,
-    data = null /*rows = defaultRows, columns = defaultColumns,*/,
-  ) => {
+  const handleClickNDF = async ( nameOperation, nameGroup, idButton = null, data = null, ) => {
+
+    if( idButton ){
+      const button = document.getElementById(idButton);
+      button.classList.replace("gradient-sn-animation", "gradient-sn");
+    }
+
     const { rows, columns } = await dashboardHelper.createContentTable(
       nameOperation,
       nameGroup,
       data,
     );
 
-    setSelectedOperation(`${nameGroup} > ${nameOperation}`);
+    setSelectedOperation(`: ${nameGroup} > ${nameOperation}`);
     setTableRows(rows);
     setTableColumns(columns);
   };
 
-  const handleClickHRH = async (
-    nameOperation,
-    nameGroup,
-    data = null /*rows = defaultRows, columns = defaultColumns,*/,
-  ) => {
+  const handleClickHRH = async ( nameOperation, nameGroup, idButton = null, data = null, ) => {
+    
+    if( idButton ){
+      const button = document.getElementById(idButton);
+      button.classList.replace("gradient-sn-animation", "gradient-sn");
+    };
+
     const { rows, columns } = await dashboardHelper.createContentTableHRH(
       nameOperation,
       nameGroup,
@@ -69,12 +73,13 @@ function Dashboard() {
               onClick={() => handleClickNDF("General", "NOELIE")}
             />
             <ButtonOperation
+              id="btn-offline-noelie"
               nameOperation={"Sin conexion"}
               length={offlineNoelie.length ?? 0}
-              gradientClass="gradient-sn"
+              gradientClass={ (offlineNoelie.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
-                handleClickNDF("Unidades sin conexion", "Noelie", offlineNoelie)
+                handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", offlineNoelie)
               }
             />
             <ButtonOperation
@@ -107,25 +112,23 @@ function Dashboard() {
               onClick={() => handleClickNDF("General", "DIFEYRO")}
             />
             <ButtonOperation
+              id="btn-offline-difeyro"
               nameOperation={"Sin conexion"}
               length={offlineDifeyro.length ?? 0}
-              gradientClass="gradient-sn"
+              gradientClass={ (offlineDifeyro.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
-                handleClickNDF(
-                  "unidades sin conexion",
-                  "Difeyro",
-                  offlineDifeyro,
-                )
+                handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", offlineDifeyro, )
               }
             />
             <ButtonOperation
+              id="btn-offline-doble-difeyro"
               nameOperation={"Dobles S/R"}
               length={offlineDifDobles.length ?? 0}
-              gradientClass="gradient-sn"
+              gradientClass={ (offlineDifDobles.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
-                handleClickNDF("Dobles S/R", "Difeyro", offlineDifDobles)
+                handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", offlineDifDobles)
               }
             />
             <div className="visually-hidden">
@@ -145,12 +148,13 @@ function Dashboard() {
               onClick={() => handleClickNDF("General", "FILSA")}
             />
             <ButtonOperation
+              id="btn-offline-filsa"
               nameOperation={"Sin conexion"}
               length={offlineFilsa.length ?? 0}
-              gradientClass="gradient-sn"
+              gradientClass={ (offlineFilsa.length > 0 ) ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
-                handleClickNDF("unidades sin conexion", "Filsa", offlineFilsa)
+                handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", offlineFilsa)
               }
             />
             <ButtonOperation
@@ -187,11 +191,12 @@ function Dashboard() {
               />
 
               <ButtonOperation
+                id="btn-offline-hrh"
                 nameOperation="S/Conexion"
                 length={offlineHRH.length ?? 0}
-                gradientClass="gradient-sn"
+                gradientClass={ (offlineHRH.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
                 type="offline"
-                onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", offlineHRH)}
+                onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", offlineHRH)}
               />
 
               <ButtonOperation
@@ -264,7 +269,7 @@ function Dashboard() {
 
               <span className="flex flex-row ms-3 px-5 py-1 gap-1 items-center rounded-4xl bg-[var(--app-background)]">
                 <FilterAltIcon />
-                Mostrando:
+                Mostrando
                 <span className="font-bold">{`${selectedOperation}:`}</span>
                 <span className="font-bold text-red-600 bg-red-200 px-2 rounded-xl">
                   {tableRows?.length ?? 0} unidades

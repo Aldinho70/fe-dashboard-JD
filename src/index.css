@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "../src/components/Dashboard/Dashboard.css";
-/* @import "../src/components/ui/ButtonOperation/ButtonOperation.css"; */
-@import "../src/components/ui/ButtonOperation/ButtonOperationGlass.css";
+@import "../src/components/ui/ButtonOperation/ButtonOperation.css";
 
 :root {
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
