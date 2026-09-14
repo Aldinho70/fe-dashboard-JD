@@ -1,20 +1,29 @@
 import TableUnits from "../ui/TableUnits/TableUnits.jsx";
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import useUnitsOffline from "../../hooks/useCountOffline.js";
+import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
 import OperationGroups from "../OperationGroups/OperationGroups.jsx";
 import ButtonOperation from "../ui/ButtonOperation/ButtonOperation.jsx"
 
 function Dashboard() {
+  const { countUnits, loading: loadCountUnis, error: errCountUnits } = useCountUnitsGroups();
+  const { unitsOffline: offlineNoelie } = useUnitsOffline('NOELIE');
+  const { unitsOffline: offlineDifeyro } = useUnitsOffline('DIFEYRO');
+  const { unitsOffline: offlineDifDobles } = useUnitsOffline('00-DIFEYRO SEGURIDAD');
+  const { unitsOffline: offlineFilsa } = useUnitsOffline('FILSA');
+
   return (
     <div className="flex flex-col gap-1 min-h-screen w-full" >
 
       <div className="flex flex-row gap-2 items-start w-full p-2 text-[var(--app-text)]">
+        
         {/* Noelie */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Noelie"}>
-            <ButtonOperation nameOperation={"Noelie"} length={0} gradientClass="gradient-green" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={0} gradientClass="gradient-sn" type="offline" />
-            <ButtonOperation nameOperation={"Desviados"} length={0} gradientClass="gradient-blue" type="desv"/>
+            <ButtonOperation nameOperation={"Noelie"} length={ countUnits["NOELIE"]  || 0} gradientClass="gradient-green" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineNoelie.length ?? 0 } gradientClass="gradient-sn" type="offline" />
+            <ButtonOperation nameOperation={"Desviados"} length={ countUnits["Z - DESVIADOS NOELIE"] } gradientClass="gradient-blue" type="desv"/>
             <ButtonOperation nameOperation={"Temperatura"} length={0} gradientClass="gradient-temp"type="tem"/>
           </OperationGroups>
         </div>
@@ -22,9 +31,9 @@ function Dashboard() {
         {/* Difeyro */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Difeyro"}>
-            <ButtonOperation nameOperation={"Difeyro"} length={0} gradientClass="gradient-purple" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={0} gradientClass="gradient-sn" type="offline" />
-            <ButtonOperation nameOperation={"Dobles S/R"} length={0} gradientClass="gradient-sn" type="offline" />
+            <ButtonOperation nameOperation={"Difeyro"} length={ countUnits["DIFEYRO"] || 0 } gradientClass="gradient-purple" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineDifeyro.length ?? 0 } gradientClass="gradient-sn" type="offline" />
+            <ButtonOperation nameOperation={"Dobles S/R"} length={ offlineDifDobles.length ?? 0 } gradientClass="gradient-sn" type="offline" />
             <div className="visually-hidden">
               <ButtonOperation nameOperation={""} length={""} />
             </div>
@@ -34,13 +43,13 @@ function Dashboard() {
         {/* Filsa */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Filsa"}>
-            <ButtonOperation nameOperation={"Filsa"} length={0} gradientClass="gradient-orange" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
-            <ButtonOperation nameOperation={"Sin conexion"} length={0} gradientClass="gradient-sn" type="offline" />
+            <ButtonOperation nameOperation={"Filsa"} length={ countUnits["FILSA"] || 0}  gradientClass="gradient-orange" img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"/>
+            <ButtonOperation nameOperation={"Sin conexion"} length={ offlineFilsa.length ?? 0 } gradientClass="gradient-sn" type="offline" />
             <ButtonOperation nameOperation={"Desviados"} length={0} gradientClass="gradient-blue" type="desv"/>
             <div className="visually-hidden">
               <ButtonOperation nameOperation={""} length={""} />
             </div>
-          </OperationGroups>  
+          </OperationGroups>
         </div>
 
         {/* HRH */}
@@ -78,11 +87,11 @@ function Dashboard() {
                 Tabla de unidades
               </span>
 
-              <span className="flex flex-row ms-3 px-5 py-1 gap-1 items-center rounded-4xl bg-[var(--app-background)]" > 
+              <span className="flex flex-row ms-3 px-5 py-1 gap-1 items-center rounded-4xl bg-[var(--app-background)]" >
                 <FilterAltIcon />
-                Mostrando: 
-                <span className="font-bold" >{`Noelie > unidades sin conexion:`}</span> 
-                <span className="font-bold text-red-600 bg-red-200 px-2 rounded-xl" >5 unidades</span> 
+                Mostrando:
+                <span className="font-bold" >{`Noelie > unidades sin conexion:`}</span>
+                <span className="font-bold text-red-600 bg-red-200 px-2 rounded-xl" >5 unidades</span>
               </span>
 
             </div>

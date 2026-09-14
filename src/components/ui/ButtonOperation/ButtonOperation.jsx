@@ -6,7 +6,6 @@ import Brightness1Icon from '@mui/icons-material/Brightness1';
 import ThermostatTwoToneIcon from '@mui/icons-material/ThermostatTwoTone';
 
 function CardOperation({ nameOperation, length, gradientClass = "", onClick, type="", img = null}) {
-
   const operationTypes = {
     offline: {
       icon: <BusAlertIcon />,
@@ -34,8 +33,6 @@ function CardOperation({ nameOperation, length, gradientClass = "", onClick, typ
   };
 
   const operation = operationTypes[type] ?? operationTypes.default;
-  console.log( operation.label );
-  
 
   return (
     <Button onClick={onClick}
@@ -67,9 +64,9 @@ function CardOperation({ nameOperation, length, gradientClass = "", onClick, typ
             <span className="min-w-0 truncate text-left text-lg font-bold text-[var(--app-text)]">
               {nameOperation}
             </span>
-            <span className="min-w-0 truncate text-left font-ligth text-xs text-[var(--app-text)] " >
+            {/* <span className="min-w-0 truncate text-left font-ligth text-xs text-[var(--app-text)] " >
               Otros datos de telemetria 
-            </span>
+            </span> */}
           </div>
 
           <span className="shrink-0 rounded-lg border border-[var(--app-text)] bg-white px-2.5 py-1 text-lg font-bold text-gray-900">
