@@ -103,7 +103,7 @@ function Dashboard() {
               nameOperation={"Noelie"}
               length={countUnits["NOELIE"] || 0}
               gradientClass="gradient-green"
-              img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+              img="../logojd.png"
               onClick={() => handleClickNDF("General", "NOELIE")}
             />
             <ButtonOperation
@@ -142,7 +142,7 @@ function Dashboard() {
               nameOperation={"Difeyro"}
               length={countUnits["DIFEYRO"] || 0}
               gradientClass="gradient-purple"
-              img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+              img="../logojd.png"
               onClick={() => handleClickNDF("General", "DIFEYRO")}
             />
             <ButtonOperation
@@ -178,7 +178,7 @@ function Dashboard() {
               nameOperation={"Filsa"}
               length={countUnits["FILSA"] || 0}
               gradientClass="gradient-orange"
-              img="http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+              img="../logojd.png"
               onClick={() => handleClickNDF("General", "FILSA")}
             />
             <ButtonOperation
@@ -219,7 +219,7 @@ function Dashboard() {
                 img={
                   dataHRH["GRUPO HRH"]?.icon
                     ? `https://hst-api.wialon.com${dataHRH["GRUPO HRH"].icon}`
-                    : "http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+                    : "../logojd.png"
                 }
                 onClick={() => handleClickHRH("General", "GRUPO HRH")}
               />
@@ -236,21 +236,21 @@ function Dashboard() {
               <ButtonOperation
                 nameOperation="Mexico"
                 length={dataHRH["03-CARGAS MEXICO"]?.units?.length ?? 0}
-                img={"http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"}
+                img={"../logojd.png"}
                 onClick={() => handleClickHRH("Mexico", "03-CARGAS MEXICO")}
               />
 
               <ButtonOperation
                 nameOperation="Congelado"
                 length={dataHRH["04-CONGELADO"]?.units?.length ?? 0}
-                img={"http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"}
+                img={"../logojd.png"}
                 onClick={() => handleClickHRH("Congelado", "04-CONGELADO")}
               />
 
               <ButtonOperation
                 nameOperation="Fresco"
                 length={dataHRH["05-FRESCO"]?.units?.length ?? 0}
-                img={ "http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"}
+                img={ "../logojd.png"}
                 onClick={() => handleClickHRH("Fresco", "05-FRESCO")}
               />
 
@@ -260,7 +260,7 @@ function Dashboard() {
                 img={
                   dataHRH["03-CARGAS FORANEAS"]?.icon
                     ? `https://hst-api.wialon.com${dataHRH["03-CARGAS FORANEAS"].icon}`
-                    : "http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+                    : "../logojd.png"
                 }
                 onClick={() => handleClickHRH("Foraneas", "03-CARGAS FORANEAS")}
               />
@@ -271,7 +271,7 @@ function Dashboard() {
                 img={
                   dataHRH["Cajas"]?.icon
                     ? `https://hst-api.wialon.com${dataHRH["HRH CAJAS"].icon}`
-                    : "http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+                    : "../logojd.png"
                 }
                 onClick={() => handleClickHRH("Cajas", "HRH CAJAS")}
               />
@@ -282,7 +282,7 @@ function Dashboard() {
                 img={
                   dataHRH["Dobles"]?.icon
                     ? `https://hst-api.wialon.com${dataHRH["HRH SEGURIDAD"].icon}`
-                    : "http://ws4cjdg.com/MonitoreoHRH/src/assets/img/logojd.png"
+                    : "../logojd.png"
                 }
                 onClick={() => handleClickHRH("Dobles", "HRH SEGURIDAD")}
               />
