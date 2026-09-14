@@ -1,6 +1,5 @@
-const useCountUnitGroupHelper = {
-
-   getCountUnitsGroupsFilter(groups = [], groups_filter = []) {
+const useDataHRHHelper = {
+    getGroupsFilter(groups = [], groups_filter = []) {
 
         const filters = groups_filter.map(
             group => group.trim().toLowerCase()
@@ -13,15 +12,12 @@ const useCountUnitGroupHelper = {
             )
             .reduce((result, group) => {
 
-                result[group.name] = group.units?.length ?? 0;
+                result[group.name] = group;
 
                 return result;
 
             }, {});
     },
+}
 
-
-
-};
-
-export default useCountUnitGroupHelper;
+export default useDataHRHHelper;

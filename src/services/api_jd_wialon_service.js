@@ -9,8 +9,10 @@ class ApiJdService {
     }
 
 
-    async getAllGroups () {
-        const url = `${this.BASE_URL_API_JD}getGroups/${this.TOKEN_DFN}`;
+    async getAllGroups ( account = "DFN" ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+        const url = `${this.BASE_URL_API_JD}getGroups/${token}`;
+
         try {
             const response = await AxiosService.get( url );
             return response;
@@ -19,8 +21,10 @@ class ApiJdService {
         }
     }
 
-    async getGroup ( group = "all" ) {
-        const url = `${this.BASE_URL_API_JD}getGroups/${this.TOKEN_DFN}?group=${group}`;
+    async getGroup ( group = "all", account = "DFN" ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+        const url = `${this.BASE_URL_API_JD}getGroups/${token}?group=${group}`;
+
         try {
             const response = await AxiosService.get( url );
             return response
@@ -29,8 +33,10 @@ class ApiJdService {
         }
     }
 
-    async getUnitsOfflineByGroup ( group = "all" ) {
-        const url = `${this.BASE_URL_API_JD}getStatusConectionsGroups/${group}/${this.TOKEN_DFN}`;
+    async getUnitsOfflineByGroup ( group = "all", account = "DFN" ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+        const url = `${this.BASE_URL_API_JD}getStatusConectionsGroups/${group}/${token}`;
+
         try {
             const response = await AxiosService.get( url );
             return response;
