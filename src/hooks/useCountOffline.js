@@ -34,6 +34,14 @@ const useUnitsOffline = (group) => {
 
         getUnitsOffline();
 
+        const interval = setInterval( () => {
+            getUnitsOffline();
+        }, 60000)
+
+        return () => {
+            clearInterval(interval);
+        }
+
     }, [group]);
 
     return {

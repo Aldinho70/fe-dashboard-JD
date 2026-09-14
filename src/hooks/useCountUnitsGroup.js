@@ -29,6 +29,14 @@ const useCountUnitsGroups = () => {
 
         getDataGroups();
 
+        const interval = setInterval( () => {
+            getDataGroups();
+        }, 60000)
+
+        return () => {
+            clearInterval(interval);
+        }
+
     }, []);
 
     return{

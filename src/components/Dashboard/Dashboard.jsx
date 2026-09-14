@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useCountHRH from "../../hooks/useCountHRH.js";
 import TableUnits from "../ui/TableUnits/TableUnits.jsx";
 import useOfflineHRH from "../../hooks/useOfflineHRH.js";
@@ -9,59 +9,93 @@ import dashboardHelper from "../../helpers/Dashboard.helper.js";
 import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
 import OperationGroups from "../OperationGroups/OperationGroups.jsx";
 import ButtonOperation from "../ui/ButtonOperation/ButtonOperation.jsx";
+import Loading from "../ui/Loading/Loading.jsx";
 
 function Dashboard() {
   const [tableRows, setTableRows] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [selectedOperation, setSelectedOperation] = useState("");
-  const { countUnits } = useCountUnitsGroups();
-  const { unitsOffline: offlineNoelie } = useUnitsOffline("NOELIE");
-  const { unitsOffline: offlineDifeyro } = useUnitsOffline("DIFEYRO");
-  const { unitsOffline: offlineDifDobles } = useUnitsOffline("00-DIFEYRO SEGURIDAD",);
-  const { unitsOffline: offlineFilsa } = useUnitsOffline("FILSA");
-  const { unitsOffline: offlineHRH } = useOfflineHRH("GRUPO HRH");
+  const { countUnits, loading: loadingUnits } = useCountUnitsGroups();
+  const { unitsOffline: offlineNoelie, loading: loadingNoelie } = useUnitsOffline("NOELIE");
+  const { unitsOffline: offlineDifeyro, loading: loadingDifeyro } = useUnitsOffline("DIFEYRO");
+  const { unitsOffline: offlineDifDobles, loading: loadingDifDobles } = useUnitsOffline("00-DIFEYRO SEGURIDAD",);
+  const { unitsOffline: offlineFilsa, loading: loadingFilsa } = useUnitsOffline("FILSA");
+  const { unitsOffline: offlineHRH, loading: loadingOfflineHRH } = useOfflineHRH("GRUPO HRH");
+  const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
+  const [loadingTable, setLoadingTable] = useState(false);
 
-  const { dataHRH } = useCountHRH();
+  const { dataHRH, loading: loadingHRH } = useCountHRH();
+  const loadingButtons = loadingUnits || loadingNoelie || loadingDifeyro || loadingDifDobles
+    || loadingFilsa || loadingOfflineHRH || loadingHRH;
+
+  useEffect(() => {
+    setDismissedOfflineAlerts(new Set());
+  }, [offlineNoelie, offlineDifeyro, offlineDifDobles, offlineFilsa, offlineHRH]);
+
+  const dismissOfflineAlert = (idButton) => {
+    setDismissedOfflineAlerts((dismissedAlerts) => {
+      const nextDismissedAlerts = new Set(dismissedAlerts);
+      nextDismissedAlerts.add(idButton);
+      return nextDismissedAlerts;
+    });
+  };
 
   const handleClickNDF = async ( nameOperation, nameGroup, idButton = null, data = null, ) => {
 
     if( idButton ){
-      const button = document.getElementById(idButton);
-      button.classList.replace("gradient-sn-animation", "gradient-sn");
+      dismissOfflineAlert(idButton);
     }
 
-    const { rows, columns } = await dashboardHelper.createContentTable(
-      nameOperation,
-      nameGroup,
-      data,
-    );
+    setLoadingTable(true);
 
-    setSelectedOperation(`: ${nameGroup} > ${nameOperation}`);
-    setTableRows(rows);
-    setTableColumns(columns);
+    try {
+      const { rows, columns } = await dashboardHelper.createContentTable(
+        nameOperation,
+        nameGroup,
+        data,
+      );
+
+      setSelectedOperation(`: ${nameGroup} > ${nameOperation}`);
+      setTableRows(rows);
+      setTableColumns(columns);
+    } finally {
+      setLoadingTable(false);
+    }
   };
 
   const handleClickHRH = async ( nameOperation, nameGroup, idButton = null, data = null, ) => {
     
     if( idButton ){
-      const button = document.getElementById(idButton);
-      button.classList.replace("gradient-sn-animation", "gradient-sn");
+      dismissOfflineAlert(idButton);
     };
 
-    const { rows, columns } = await dashboardHelper.createContentTableHRH(
-      nameOperation,
-      nameGroup,
-      data,
-    );
+    setLoadingTable(true);
 
-    setSelectedOperation(`${nameGroup} > ${nameOperation}`);
-    setTableRows(rows);
-    setTableColumns(columns);
+    try {
+      const { rows, columns } = await dashboardHelper.createContentTableHRH(
+        nameOperation,
+        nameGroup,
+        data,
+      );
+
+      setSelectedOperation(`${nameGroup} > ${nameOperation}`);
+      setTableRows(rows);
+      setTableColumns(columns);
+    } finally {
+      setLoadingTable(false);
+    }
   };
 
   return (
     <div className="flex flex-col gap-1 min-h-screen w-full">
-      <div className="flex flex-row gap-2 items-start w-full p-2 text-[var(--app-text)]">
+      <div className="relative">
+        {loadingButtons && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center p-2">
+            <Loading message="Cargando información de los botones..." />
+          </div>
+        )}
+
+        <div className={`flex flex-row gap-2 items-start w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}>
         {/* Noelie */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Noelie"}>
@@ -76,7 +110,7 @@ function Dashboard() {
               id="btn-offline-noelie"
               nameOperation={"Sin conexion"}
               length={offlineNoelie.length ?? 0}
-              gradientClass={ (offlineNoelie.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
+              gradientClass={offlineNoelie.length > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
                 handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", offlineNoelie)
@@ -115,7 +149,7 @@ function Dashboard() {
               id="btn-offline-difeyro"
               nameOperation={"Sin conexion"}
               length={offlineDifeyro.length ?? 0}
-              gradientClass={ (offlineDifeyro.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
+              gradientClass={offlineDifeyro.length > 0 && !dismissedOfflineAlerts.has("btn-offline-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
                 handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", offlineDifeyro, )
@@ -125,7 +159,7 @@ function Dashboard() {
               id="btn-offline-doble-difeyro"
               nameOperation={"Dobles S/R"}
               length={offlineDifDobles.length ?? 0}
-              gradientClass={ (offlineDifDobles.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
+              gradientClass={offlineDifDobles.length > 0 && !dismissedOfflineAlerts.has("btn-offline-doble-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
                 handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", offlineDifDobles)
@@ -151,7 +185,7 @@ function Dashboard() {
               id="btn-offline-filsa"
               nameOperation={"Sin conexion"}
               length={offlineFilsa.length ?? 0}
-              gradientClass={ (offlineFilsa.length > 0 ) ? "gradient-sn-animation" : "gradient-sn"}
+              gradientClass={offlineFilsa.length > 0 && !dismissedOfflineAlerts.has("btn-offline-filsa") ? "gradient-sn-animation" : "gradient-sn"}
               type="offline"
               onClick={() =>
                 handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", offlineFilsa)
@@ -194,7 +228,7 @@ function Dashboard() {
                 id="btn-offline-hrh"
                 nameOperation="S/Conexion"
                 length={offlineHRH.length ?? 0}
-                gradientClass={ (offlineHRH.length > 0) ? "gradient-sn-animation" : "gradient-sn"}
+                gradientClass={offlineHRH.length > 0 && !dismissedOfflineAlerts.has("btn-offline-hrh") ? "gradient-sn-animation" : "gradient-sn"}
                 type="offline"
                 onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", offlineHRH)}
               />
@@ -255,6 +289,7 @@ function Dashboard() {
             </div>
           </fieldset>
         </div>
+        </div>
       </div>
 
       {/* Table */}
@@ -277,7 +312,14 @@ function Dashboard() {
               </span>
             </div>
           </legend>
-          <TableUnits columns={tableColumns} rows={tableRows} />
+          <div className="relative">
+            {loadingTable && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center p-4">
+                <Loading message="Cargando datos en la tabla..." />
+              </div>
+            )}
+            <TableUnits columns={tableColumns} rows={tableRows} />
+          </div>
         </div>
       </div>
     </div>

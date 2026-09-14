@@ -55,7 +55,7 @@ const dashboardHelper = {
                 unit: unit.name,
                 lastMessage: parseTimestamp( last_message.timestamp ),
                 direction: 'Ruta desconocida',
-                connection: 'Desconocidad'
+                connection: 'Desconocido'
             }
         })
 

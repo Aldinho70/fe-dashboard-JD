@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -15,6 +15,15 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 
 export default function Sidebar() {
   const { darkMode, toggleTheme } = useContext(ThemeContext);
+  const [secondsUntilUpdate, setSecondsUntilUpdate] = useState(59);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsUntilUpdate((seconds) => (seconds === 0 ? 59 : seconds - 1));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -83,7 +92,7 @@ export default function Sidebar() {
                   </span>
 
                   <span id="cont-update" className="text-sm font-semibold text-[var(--app-text)]">
-                    59 segundos
+                    {secondsUntilUpdate} {secondsUntilUpdate === 1 ? "segundo" : "segundos"}
                   </span>
                 </div>
               </div>

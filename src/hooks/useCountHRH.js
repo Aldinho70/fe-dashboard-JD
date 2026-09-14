@@ -37,6 +37,15 @@ const useCountHRH = () => {
         }
         
         getDataHRH();
+
+        const interval = setInterval( () => {
+            getDataHRH();
+        }, 60000)
+
+        return () => {
+            clearInterval(interval);
+        }
+
     }, [] );
 
     return{
