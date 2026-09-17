@@ -34,9 +34,9 @@ export default function TableUnits({
 }) {
 
   return (
-    <div className={`w-full overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-table)] ${className}`}>
+    <div className={`w-full  overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-[var(--surface-table)] ${className}`}>
       <div className={`overflow-x-auto overflow-y-auto scrollbar-thin ${containerClassName}`}>
-        <table className="w-full min-w-[760px] border-collapse text-sm">
+        <table className="w-full min-w-screem border-collapse text-sm">
           <caption className="sr-only">{caption}</caption>
           <thead className="sticky top-0 z-10 bg-[var(--surface-table-header)]">
             <tr className="h-10">

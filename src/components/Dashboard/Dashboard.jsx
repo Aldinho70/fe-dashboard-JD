@@ -87,7 +87,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col gap-1 min-h-screen w-full">
+    <div className="flex flex-col gap-1 min-h-screen max-h-screen w-full overflow-y-auto xl:overflow-y-hidden">
       <div className="relative">
         {loadingButtons && (
           <div className="absolute inset-0 z-20 flex items-center justify-center p-2">
@@ -95,7 +95,8 @@ function Dashboard() {
           </div>
         )}
 
-        <div className={`flex flex-row gap-2 items-start w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}>
+        {/* <div className={`flex flex-row flex-wrap gap-2 items-start w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}> */}
+        <div className={` flex flex-col md:grid md:grid-cols-2 xl:flex xl:flex-row gap-2 w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}>
         {/* Noelie */}
         <div className="flex-1 min-w-0">
           <OperationGroups nameGroup={"Noelie"}>
@@ -205,7 +206,7 @@ function Dashboard() {
         </div>
 
         {/* HRH */}
-        <div className="flex-2 min-w-0 ">
+        <div className="flex-2 min-w-0">
           <fieldset className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-panel)] p-2 shadow-xl shadow-slate-950/20 backdrop-blur-sm">
             <legend className="px-3">
               <span className="inline-block rounded-xl border border-[var(--accent)]/20 bg-[var(--surface-panel)] px-3 text-2xl font-bold tracking-tight text-[var(--app-text)]">
@@ -293,7 +294,7 @@ function Dashboard() {
       </div>
 
       {/* Table */}
-      <div className="flex flex-col flex-1 w-full">
+      <div className="flex flex-col flex-1 w-full max-h-screen">
         <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-panel)] pb-1 px-2 shadow-2xl shadow-slate-950/20 backdrop-blur-sm">
           <legend className="py-2">
             <div className="flex flex-row items-center">
