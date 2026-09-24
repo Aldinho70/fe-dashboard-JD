@@ -24,6 +24,9 @@ function Dashboard() {
   const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
   const [loadingTable, setLoadingTable] = useState(false);
 
+  console.log( countUnits );
+  
+
   const { dataHRH, loading: loadingHRH } = useCountHRH();
   const loadingButtons = loadingUnits || loadingNoelie || loadingDifeyro || loadingDifDobles
     || loadingFilsa || loadingOfflineHRH || loadingHRH;
@@ -86,9 +89,19 @@ function Dashboard() {
     }
   };
 
+  const handleViewMap = async ( unitId ) => {
+    alert(`Ver en mapa: ${unitId}`);
+  }
+
+  const handleSenComand = async ( unitId ) => {
+    alert(`Enviar comandos ${unitId}`);
+  }
+
   return (
     <div className="flex flex-col gap-1 min-h-screen max-h-screen w-full overflow-y-auto xl:overflow-y-hidden">
+
       <div className="relative">
+
         {loadingButtons && (
           <div className="absolute inset-0 z-20 flex items-center justify-center p-2">
             <Loading message="Cargando información de los botones..." />
@@ -97,199 +110,205 @@ function Dashboard() {
 
         {/* <div className={`flex flex-row flex-wrap gap-2 items-start w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}> */}
         <div className={` flex flex-col md:grid md:grid-cols-2 xl:flex xl:flex-row gap-2 w-full p-2 text-[var(--app-text)] transition-opacity duration-200 ${loadingButtons ? "pointer-events-none opacity-50" : ""}`}>
-        {/* Noelie */}
-        <div className="flex-1 min-w-0">
-          <OperationGroups nameGroup={"Noelie"}>
-            <ButtonOperation
-              nameOperation={"Noelie"}
-              length={countUnits["NOELIE"] || 0}
-              gradientClass="gradient-green"
-              img="../logojd.png"
-              onClick={() => handleClickNDF("General", "NOELIE")}
-            />
-            <ButtonOperation
-              id="btn-offline-noelie"
-              nameOperation={"Sin conexion"}
-              length={offlineNoelie.length ?? 0}
-              gradientClass={offlineNoelie.length > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
-              type="offline"
-              onClick={() =>
-                handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", offlineNoelie)
-              }
-            />
-            <ButtonOperation
-              nameOperation={"Desviados"}
-              length={countUnits["Z - DESVIADOS NOELIE"]}
-              gradientClass="gradient-blue"
-              type="desv"
-              onClick={() =>
-                handleClickNDF("Desviados", "Z - DESVIADOS NOELIE")
-              }
-            />
-            <ButtonOperation
-              nameOperation={"Temperatura"}
-              length={0}
-              gradientClass="gradient-temp"
-              type="tem"
-              onClick={() => handleClickNDF("Temperatura", "NOELIE")}
-            />
-          </OperationGroups>
-        </div>
-
-        {/* Difeyro */}
-        <div className="flex-1 min-w-0">
-          <OperationGroups nameGroup={"Difeyro"}>
-            <ButtonOperation
-              nameOperation={"Difeyro"}
-              length={countUnits["DIFEYRO"] || 0}
-              gradientClass="gradient-purple"
-              img="../logojd.png"
-              onClick={() => handleClickNDF("General", "DIFEYRO")}
-            />
-            <ButtonOperation
-              id="btn-offline-difeyro"
-              nameOperation={"Sin conexion"}
-              length={offlineDifeyro.length ?? 0}
-              gradientClass={offlineDifeyro.length > 0 && !dismissedOfflineAlerts.has("btn-offline-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
-              type="offline"
-              onClick={() =>
-                handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", offlineDifeyro, )
-              }
-            />
-            <ButtonOperation
-              id="btn-offline-doble-difeyro"
-              nameOperation={"Dobles S/R"}
-              length={offlineDifDobles.length ?? 0}
-              gradientClass={offlineDifDobles.length > 0 && !dismissedOfflineAlerts.has("btn-offline-doble-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
-              type="offline"
-              onClick={() =>
-                handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", offlineDifDobles)
-              }
-            />
-            <div className="visually-hidden">
-              <ButtonOperation nameOperation={""} length={""} />
-            </div>
-          </OperationGroups>
-        </div>
-
-        {/* Filsa */}
-        <div className="flex-1 min-w-0">
-          <OperationGroups nameGroup={"Filsa"}>
-            <ButtonOperation
-              nameOperation={"Filsa"}
-              length={countUnits["FILSA"] || 0}
-              gradientClass="gradient-orange"
-              img="../logojd.png"
-              onClick={() => handleClickNDF("General", "FILSA")}
-            />
-            <ButtonOperation
-              id="btn-offline-filsa"
-              nameOperation={"Sin conexion"}
-              length={offlineFilsa.length ?? 0}
-              gradientClass={offlineFilsa.length > 0 && !dismissedOfflineAlerts.has("btn-offline-filsa") ? "gradient-sn-animation" : "gradient-sn"}
-              type="offline"
-              onClick={() =>
-                handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", offlineFilsa)
-              }
-            />
-            <ButtonOperation
-              nameOperation={"Desviados"}
-              length={0}
-              gradientClass="gradient-blue"
-              type="desv"
-              onClick={() => handleClickNDF("Desviados", "FILSA_desviados")}
-            />
-            <div className="visually-hidden">
-              <ButtonOperation nameOperation={""} length={""} />
-            </div>
-          </OperationGroups>
-        </div>
-
-        {/* HRH */}
-        <div className="flex-2 min-w-0">
-          <fieldset className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-panel)] p-2 shadow-xl shadow-slate-950/20 backdrop-blur-sm">
-            <legend className="px-3">
-              <span className="inline-block rounded-xl border border-[var(--accent)]/20 bg-[var(--surface-panel)] px-3 text-2xl font-bold tracking-tight text-[var(--app-text)]">
-                HRH
-              </span>
-            </legend>
-            <div className="grid grid-cols-2 gap-3 p-3">
+        
+          {/* Noelie */}
+          <div className="flex-1 min-w-0">
+            <OperationGroups nameGroup={"Noelie"}>
               <ButtonOperation
-                nameOperation="HRH"
-                length={dataHRH["GRUPO HRH"]?.units?.length ?? 0}
-                img={
-                  dataHRH["GRUPO HRH"]?.icon
-                    ? `https://hst-api.wialon.com${dataHRH["GRUPO HRH"].icon}`
-                    : "../logojd.png"
-                }
-                onClick={() => handleClickHRH("General", "GRUPO HRH")}
+                nameOperation={"Noelie"}
+                length={countUnits["NOELIE"] || 0}
+                gradientClass="gradient-green"
+                img="../logojd.png"
+                onClick={() => handleClickNDF("General", "NOELIE")}
               />
-
               <ButtonOperation
-                id="btn-offline-hrh"
-                nameOperation="S/Conexion"
-                length={offlineHRH.length ?? 0}
-                gradientClass={offlineHRH.length > 0 && !dismissedOfflineAlerts.has("btn-offline-hrh") ? "gradient-sn-animation" : "gradient-sn"}
+                id="btn-offline-noelie"
+                nameOperation={"Sin conexion"}
+                length={offlineNoelie.length ?? 0}
+                gradientClass={offlineNoelie.length > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
                 type="offline"
-                onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", offlineHRH)}
-              />
-
-              <ButtonOperation
-                nameOperation="Mexico"
-                length={dataHRH["03-CARGAS MEXICO"]?.units?.length ?? 0}
-                img={"../logojd.png"}
-                onClick={() => handleClickHRH("Mexico", "03-CARGAS MEXICO")}
-              />
-
-              <ButtonOperation
-                nameOperation="Congelado"
-                length={dataHRH["04-CONGELADO"]?.units?.length ?? 0}
-                img={"../logojd.png"}
-                onClick={() => handleClickHRH("Congelado", "04-CONGELADO")}
-              />
-
-              <ButtonOperation
-                nameOperation="Fresco"
-                length={dataHRH["05-FRESCO"]?.units?.length ?? 0}
-                img={ "../logojd.png"}
-                onClick={() => handleClickHRH("Fresco", "05-FRESCO")}
-              />
-
-              <ButtonOperation
-                nameOperation="Foraneas"
-                length={dataHRH["03-CARGAS FORANEAS"]?.units?.length ?? 0}
-                img={
-                  dataHRH["03-CARGAS FORANEAS"]?.icon
-                    ? `https://hst-api.wialon.com${dataHRH["03-CARGAS FORANEAS"].icon}`
-                    : "../logojd.png"
+                onClick={() =>
+                  handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", offlineNoelie)
                 }
-                onClick={() => handleClickHRH("Foraneas", "03-CARGAS FORANEAS")}
               />
-
               <ButtonOperation
-                nameOperation="Cajas"
-                length={dataHRH["HRH CAJAS"]?.units?.length ?? 0}
-                img={
-                  dataHRH["Cajas"]?.icon
-                    ? `https://hst-api.wialon.com${dataHRH["HRH CAJAS"].icon}`
-                    : "../logojd.png"
+                nameOperation={"Desviados"}
+                length={countUnits["Z - DESVIADOS NOELIE"]}
+                gradientClass="gradient-blue"
+                type="desv"
+                onClick={() =>
+                  handleClickNDF("Desviados", "Z - DESVIADOS NOELIE")
                 }
-                onClick={() => handleClickHRH("Cajas", "HRH CAJAS")}
               />
-
               <ButtonOperation
-                nameOperation="Dobles"
-                length={dataHRH["HRH SEGURIDAD"]?.units?.length ?? 0}
-                img={
-                  dataHRH["Dobles"]?.icon
-                    ? `https://hst-api.wialon.com${dataHRH["HRH SEGURIDAD"].icon}`
-                    : "../logojd.png"
-                }
-                onClick={() => handleClickHRH("Dobles", "HRH SEGURIDAD")}
+                nameOperation={"Temperatura"}
+                length={0}
+                gradientClass="gradient-temp"
+                type="tem"
+                onClick={() => handleClickNDF("Temperatura", "NOELIE")}
               />
-            </div>
-          </fieldset>
-        </div>
+            </OperationGroups>
+          </div>
+
+          {/* Difeyro */}
+          <div className="flex-1 min-w-0">
+            <OperationGroups nameGroup={"Difeyro"}>
+              <ButtonOperation
+                nameOperation={"Difeyro"}
+                length={countUnits["DIFEYRO"] || 0}
+                gradientClass="gradient-purple"
+                img="../logojd.png"
+                onClick={() => handleClickNDF("General", "DIFEYRO")}
+              />
+              <ButtonOperation
+                id="btn-offline-difeyro"
+                nameOperation={"Sin conexion"}
+                length={offlineDifeyro.length ?? 0}
+                gradientClass={offlineDifeyro.length > 0 && !dismissedOfflineAlerts.has("btn-offline-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
+                type="offline"
+                onClick={() =>
+                  handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", offlineDifeyro, )
+                }
+              />
+              <ButtonOperation
+                id="btn-offline-doble-difeyro"
+                nameOperation={"Dobles S/R"}
+                length={offlineDifDobles.length ?? 0}
+                gradientClass={offlineDifDobles.length > 0 && !dismissedOfflineAlerts.has("btn-offline-doble-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
+                type="offline"
+                onClick={() =>
+                  handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", offlineDifDobles)
+                }
+              />
+              <ButtonOperation
+                nameOperation={"Costco"}
+                length={countUnits["DIFEYRO MIGRACION MEERKAT"] || 0}
+                gradientClass="gradient-temp"
+                img="https://pngate.com/wp-content/uploads/2025/04/costco-logo-main-2025-blue-red-horizontal-1.png"
+                onClick={() => handleClickNDF("Costco", "DIFEYRO MIGRACION MEERKAT")}
+              />
+            </OperationGroups>
+          </div>
+
+          {/* Filsa */}
+          <div className="flex-1 min-w-0">
+            <OperationGroups nameGroup={"Filsa"}>
+              <ButtonOperation
+                nameOperation={"Filsa"}
+                length={countUnits["FILSA"] || 0}
+                gradientClass="gradient-orange"
+                img="../logojd.png"
+                onClick={() => handleClickNDF("General", "FILSA")}
+              />
+              <ButtonOperation
+                id="btn-offline-filsa"
+                nameOperation={"Sin conexion"}
+                length={offlineFilsa.length ?? 0}
+                gradientClass={offlineFilsa.length > 0 && !dismissedOfflineAlerts.has("btn-offline-filsa") ? "gradient-sn-animation" : "gradient-sn"}
+                type="offline"
+                onClick={() =>
+                  handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", offlineFilsa)
+                }
+              />
+              <ButtonOperation
+                nameOperation={"Desviados"}
+                length={0}
+                gradientClass="gradient-blue"
+                type="desv"
+                onClick={() => handleClickNDF("Desviados", "FILSA_desviados")}
+              />
+              <div className="visually-hidden">
+                <ButtonOperation nameOperation={""} length={""} />
+              </div>
+            </OperationGroups>
+          </div>
+
+          {/* HRH */}
+          <div className="flex-2 min-w-0">
+            <fieldset className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-panel)] p-2 shadow-xl shadow-slate-950/20 backdrop-blur-sm">
+              <legend className="px-3">
+                <span className="inline-block rounded-xl border border-[var(--accent)]/20 bg-[var(--surface-panel)] px-3 text-2xl font-bold tracking-tight text-[var(--app-text)]">
+                  HRH
+                </span>
+              </legend>
+              <div className="grid grid-cols-2 gap-3 p-3">
+                <ButtonOperation
+                  nameOperation="HRH"
+                  length={dataHRH["GRUPO HRH"]?.units?.length ?? 0}
+                  img={
+                    dataHRH["GRUPO HRH"]?.icon
+                      ? `https://hst-api.wialon.com${dataHRH["GRUPO HRH"].icon}`
+                      : "../logojd.png"
+                  }
+                  onClick={() => handleClickHRH("General", "GRUPO HRH")}
+                />
+
+                <ButtonOperation
+                  id="btn-offline-hrh"
+                  nameOperation="S/Conexion"
+                  length={offlineHRH.length ?? 0}
+                  gradientClass={offlineHRH.length > 0 && !dismissedOfflineAlerts.has("btn-offline-hrh") ? "gradient-sn-animation" : "gradient-sn"}
+                  type="offline"
+                  onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", offlineHRH)}
+                />
+
+                <ButtonOperation
+                  nameOperation="Mexico"
+                  length={dataHRH["03-CARGAS MEXICO"]?.units?.length ?? 0}
+                  img={"../logojd.png"}
+                  onClick={() => handleClickHRH("Mexico", "03-CARGAS MEXICO")}
+                />
+
+                <ButtonOperation
+                  nameOperation="Congelado"
+                  length={dataHRH["04-CONGELADO"]?.units?.length ?? 0}
+                  img={"../logojd.png"}
+                  onClick={() => handleClickHRH("Congelado", "04-CONGELADO")}
+                />
+
+                <ButtonOperation
+                  nameOperation="Fresco"
+                  length={dataHRH["05-FRESCO"]?.units?.length ?? 0}
+                  img={ "../logojd.png"}
+                  onClick={() => handleClickHRH("Fresco", "05-FRESCO")}
+                />
+
+                <ButtonOperation
+                  nameOperation="Foraneas"
+                  length={dataHRH["03-CARGAS FORANEAS"]?.units?.length ?? 0}
+                  img={
+                    dataHRH["03-CARGAS FORANEAS"]?.icon
+                      ? `https://hst-api.wialon.com${dataHRH["03-CARGAS FORANEAS"].icon}`
+                      : "../logojd.png"
+                  }
+                  onClick={() => handleClickHRH("Foraneas", "03-CARGAS FORANEAS")}
+                />
+
+                <ButtonOperation
+                  nameOperation="Cajas"
+                  length={dataHRH["HRH CAJAS"]?.units?.length ?? 0}
+                  img={
+                    dataHRH["Cajas"]?.icon
+                      ? `https://hst-api.wialon.com${dataHRH["HRH CAJAS"].icon}`
+                      : "../logojd.png"
+                  }
+                  onClick={() => handleClickHRH("Cajas", "HRH CAJAS")}
+                />
+
+                <ButtonOperation
+                  nameOperation="Dobles"
+                  length={dataHRH["HRH SEGURIDAD"]?.units?.length ?? 0}
+                  img={
+                    dataHRH["Dobles"]?.icon
+                      ? `https://hst-api.wialon.com${dataHRH["HRH SEGURIDAD"].icon}`
+                      : "../logojd.png"
+                  }
+                  onClick={() => handleClickHRH("Dobles", "HRH SEGURIDAD")}
+                />
+              </div>
+            </fieldset>
+          </div>
+
         </div>
       </div>
 
@@ -319,7 +338,28 @@ function Dashboard() {
                 <Loading message="Cargando datos en la tabla..." />
               </div>
             )}
-            <TableUnits columns={tableColumns} rows={tableRows} />
+            <TableUnits 
+              columns={tableColumns}
+              rows={tableRows} 
+              // renderCell={(value, row, column) => {
+              //   if (column.id === 'handleActions') {
+              //     return (
+              //       <div className="flex items-center justify-start gap-2">
+              //         <button onClick={() => handleViewMap(row.unit_id)} className="rounded-full bg-[var(--accent)] px-3 py-1 text-xs text-white" title="Ver en maps">
+              //           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000F5"><path d="M640-560v-126 126ZM174-132q-20 8-37-4.5T120-170v-560q0-13 7.5-23t20.5-15l212-72 240 84 186-72q20-8 37 4.5t17 33.5v337q-15-23-35.5-42T760-528v-204l-120 46v126q-21 0-41 3.5T560-546v-140l-160-56v523l-226 87Zm26-96 120-46v-468l-120 40v474Zm496.5-32q22.5-20 23.5-60 1-34-22.5-57T640-400q-34 0-57 23t-23 57q0 34 23 57t57 23q34 0 56.5-20ZM640-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 43.5T778-238l102 102-56 56-102-102q-18 11-38.5 16.5T640-160ZM320-742v468-468Z"/></svg>
+              //         </button>
+
+              //         {row.sendComand && (
+              //           <button onClick={() => handleSenComand(row.unit_id)} className="rounded-full bg-gray-500 px-3 py-1 text-xs text-white" title="Enviar comando" >
+              //             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000F5"><path d="m720-120-56-56 63-64H560v-80h167l-63-64 56-56 160 160-160 160Zm-600 0v-600q0-33 23.5-56.5T200-800h480q33 0 56.5 23.5T760-720v203q-10-2-20-2.5t-20-.5q-10 0-20 .5t-20 2.5v-203H200v400h283q-2 10-2.5 20t-.5 20q0 10 .5 20t2.5 20H240L120-120Zm160-440h320v-80H280v80Zm0 160h200v-80H280v80Zm-80 80v-400 400Z"/></svg>
+              //           </button>
+              //         )}
+              //       </div>
+              //     );
+              //   }
+              //   return value;
+              // }}
+            />
           </div>
         </div>
       </div>

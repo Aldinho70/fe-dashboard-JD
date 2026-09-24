@@ -21,9 +21,11 @@ const dashboardHelper = {
             const { last_message } = unit;
             return{
                 unit: unit.name,
+                unit_id: unit.id,
                 lastMessage: parseTimestamp( last_message.timestamp ),
                 direction: 'Ruta desconocida',
-                connection: 'Desconocidad'
+                connection: 'Conexion desconocida',
+                sendComand: ( operation == 'Costco' ) ? true : false,
             }
         })
 
@@ -34,7 +36,7 @@ const dashboardHelper = {
                 { id: "lastMessage", label: "Ultimo mensaje" },
                 { id: "direction", label: "Direccion" },
                 { id: "connection", label: "Conexion" },
-                { id: "handleViewMap", label: "Ver mapa" },
+                { id: "handleActions", label: "Acciones" },
             ],
         }
     },
@@ -55,7 +57,8 @@ const dashboardHelper = {
                 unit: unit.name,
                 lastMessage: parseTimestamp( last_message.timestamp ),
                 direction: 'Ruta desconocida',
-                connection: 'Desconocido'
+                connection: 'Desconocido',
+
             }
         })
 
@@ -66,7 +69,7 @@ const dashboardHelper = {
                 { id: "lastMessage", label: "Ultimo mensaje" },
                 { id: "direction", label: "Direccion" },
                 { id: "connection", label: "Conexion" },
-                { id: "handleViewMap", label: "Ver mapa" },
+                { id: "handleActions", label: "Acciones" },
             ],
         }
     }

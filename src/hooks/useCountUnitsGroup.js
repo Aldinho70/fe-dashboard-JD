@@ -16,7 +16,7 @@ const useCountUnitsGroups = () => {
 
                 const dataGroups = await api_jd_wialon_service.getAllGroups();
 
-                const countUnitsByGroupFilter = useCountUnitGroupHelper.getCountUnitsGroupsFilter( dataGroups, ['Noelie', 'Difeyro', 'Filsa', '00-DIFEYRO SEGURIDAD', 'Z - DESVIADOS NOELIE']);
+                const countUnitsByGroupFilter = useCountUnitGroupHelper.getCountUnitsGroupsFilter( dataGroups, ['Noelie', 'Difeyro', 'Filsa', '00-DIFEYRO SEGURIDAD', 'Z - DESVIADOS NOELIE', 'DIFEYRO MIGRACION MEERKAT']);
 
                 setCountUnits( countUnitsByGroupFilter );
 

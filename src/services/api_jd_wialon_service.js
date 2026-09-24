@@ -17,7 +17,8 @@ class ApiJdService {
             const response = await AxiosService.get( url );
             return response;
         } catch (error) {
-            throw this.handleError(error);
+            // throw this.handleError(error);
+            console.log(error);
         }
     }
 
@@ -29,7 +30,8 @@ class ApiJdService {
             const response = await AxiosService.get( url );
             return response
         } catch (error) {
-            throw this.handleError( error )
+            // throw this.handleError( error )
+            console.log( error )
         }
     }
 
@@ -41,7 +43,8 @@ class ApiJdService {
             const response = await AxiosService.get( url );
             return response;
         } catch (error) {
-            throw this.handleError(error);
+            // throw this.handleError(error);
+            console.log(error);
         }
     }
 
