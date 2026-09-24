@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "../src/components/Dashboard/Dashboard.css";
+@import "../src/views/Dashboard/Dashboard.css";
 @import "../src/components/ui/ButtonOperation/ButtonOperation.css";
 
 :root {

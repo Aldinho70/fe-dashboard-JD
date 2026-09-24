@@ -18,11 +18,13 @@ const dashboardHelper = {
         }
 
         const rows = units.map( unit => {
-            const { last_message } = unit;
+            const { last_message, fields } = unit;
             return{
                 unit: unit.name,
                 unit_id: unit.id,
                 lastMessage: parseTimestamp( last_message.timestamp ),
+                last_message,
+                fields,
                 direction: 'Ruta desconocida',
                 connection: 'Conexion desconocida',
                 sendComand: ( operation == 'Costco' ) ? true : false,

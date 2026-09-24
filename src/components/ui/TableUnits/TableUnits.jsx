@@ -1,30 +1,12 @@
-const defaultColumns = [
-  { id: "unit", label: "Unidad" },
-  { id: "lastMessage", label: "Ultimo mensaje" },
-  { id: "direction", label: "Direccion" },
-  { id: "connection", label: "Conexion" },
-  { id: "handleViewMap", label: "Ver mapa" },
-];
-
-const defaultRows = [
-  { unit: "Default 1", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Default 2", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Default 3", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Default 4", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-  { unit: "Default 5", lastMessage: "11/09/26 01:25 pm", direction: "Boulevard revolucion torreon coahuila, mexico", connection: "Online" },
-];
-
 const alignmentClasses = {
   left: "text-left",
   center: "text-center",
   right: "text-right",
 };
 
-export { defaultColumns, defaultRows };
-
 export default function TableUnits({
-  columns = defaultColumns,
-  rows = defaultRows,
+  columns = [],
+  rows = [],
   caption = "Tabla de unidades",
   renderCell,
   getRowKey = (row, rowIndex) => row.id ?? row.unit ?? rowIndex,

@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
+import Map from '../../components/Map/Map.jsx'
 import useCountHRH from "../../hooks/useCountHRH.js";
-import TableUnits from "../ui/TableUnits/TableUnits.jsx";
 import useOfflineHRH from "../../hooks/useOfflineHRH.js";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import Command from "../../components/Command/Command.jsx";
 import useUnitsOffline from "../../hooks/useCountOffline.js";
+import Loading from "../../components/ui/Loading/Loading.jsx";
 import dashboardHelper from "../../helpers/Dashboard.helper.js";
 import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
-import OperationGroups from "../OperationGroups/OperationGroups.jsx";
-import ButtonOperation from "../ui/ButtonOperation/ButtonOperation.jsx";
-import Loading from "../ui/Loading/Loading.jsx";
+import TableUnits from "../../components/ui/TableUnits/TableUnits.jsx";
+import OperationGroups from "../../components/OperationGroups/OperationGroups.jsx";
+import ButtonOperation from "../../components/ui/ButtonOperation/ButtonOperation.jsx";
+import ModalGeneric, { VoidModal } from "../../components/ui/ModalGeneric/ModalGeneric.jsx";
 
 function Dashboard() {
   const [tableRows, setTableRows] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [selectedOperation, setSelectedOperation] = useState("");
+  
   const { countUnits, loading: loadingUnits } = useCountUnitsGroups();
+  const { unitsOffline: offlineFilsa, loading: loadingFilsa } = useUnitsOffline("FILSA");
   const { unitsOffline: offlineNoelie, loading: loadingNoelie } = useUnitsOffline("NOELIE");
+  const { unitsOffline: offlineHRH, loading: loadingOfflineHRH } = useOfflineHRH("GRUPO HRH");
   const { unitsOffline: offlineDifeyro, loading: loadingDifeyro } = useUnitsOffline("DIFEYRO");
   const { unitsOffline: offlineDifDobles, loading: loadingDifDobles } = useUnitsOffline("00-DIFEYRO SEGURIDAD",);
-  const { unitsOffline: offlineFilsa, loading: loadingFilsa } = useUnitsOffline("FILSA");
-  const { unitsOffline: offlineHRH, loading: loadingOfflineHRH } = useOfflineHRH("GRUPO HRH");
-  const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
-  const [loadingTable, setLoadingTable] = useState(false);
 
-  console.log( countUnits );
-  
-
+  const [ open, setOpen ] = useState(false);
   const { dataHRH, loading: loadingHRH } = useCountHRH();
-  const loadingButtons = loadingUnits || loadingNoelie || loadingDifeyro || loadingDifDobles
-    || loadingFilsa || loadingOfflineHRH || loadingHRH;
+  const [loadingTable, setLoadingTable] = useState(false);
+  const [ childrenModal, setChildrenModal ] = useState( VoidModal() )
+
+  const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
+
+  const loadingButtons = loadingUnits || loadingNoelie || loadingDifeyro || loadingDifDobles || loadingFilsa || loadingOfflineHRH || loadingHRH;
 
   useEffect(() => {
     setDismissedOfflineAlerts(new Set());
@@ -89,12 +93,24 @@ function Dashboard() {
     }
   };
 
-  const handleViewMap = async ( unitId ) => {
-    alert(`Ver en mapa: ${unitId}`);
+  const handleViewMap = async ( unit ) => {
+    setOpen(true);
+    setChildrenModal( 
+      <Map  
+        latitud={unit?.last_message?.position?.latitude}
+        longitud={unit?.last_message?.position?.longitude}
+        name={unit?.unit}
+      /> 
+    );
   }
 
-  const handleSenComand = async ( unitId ) => {
-    alert(`Enviar comandos ${unitId}`);
+  const handleSenComand = async ( unit ) => {
+    setOpen(true);
+    setChildrenModal( 
+    <Command 
+      name={unit.unit}
+      fields={unit.fields}
+    /> );
   }
 
   return (
@@ -341,28 +357,35 @@ function Dashboard() {
             <TableUnits 
               columns={tableColumns}
               rows={tableRows} 
-              // renderCell={(value, row, column) => {
-              //   if (column.id === 'handleActions') {
-              //     return (
-              //       <div className="flex items-center justify-start gap-2">
-              //         <button onClick={() => handleViewMap(row.unit_id)} className="rounded-full bg-[var(--accent)] px-3 py-1 text-xs text-white" title="Ver en maps">
-              //           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000F5"><path d="M640-560v-126 126ZM174-132q-20 8-37-4.5T120-170v-560q0-13 7.5-23t20.5-15l212-72 240 84 186-72q20-8 37 4.5t17 33.5v337q-15-23-35.5-42T760-528v-204l-120 46v126q-21 0-41 3.5T560-546v-140l-160-56v523l-226 87Zm26-96 120-46v-468l-120 40v474Zm496.5-32q22.5-20 23.5-60 1-34-22.5-57T640-400q-34 0-57 23t-23 57q0 34 23 57t57 23q34 0 56.5-20ZM640-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 43.5T778-238l102 102-56 56-102-102q-18 11-38.5 16.5T640-160ZM320-742v468-468Z"/></svg>
-              //         </button>
+              renderCell={(value, row, column) => {
+                if (column.id === 'handleActions') {
+                  return (
+                    <div className="flex items-center justify-start gap-2">
+                      <button onClick={() => handleViewMap(row)} className="rounded-full bg-[var(--accent)] px-3 py-1 text-xs text-white" title="Ver en maps">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="M640-560v-126 126ZM174-132q-20 8-37-4.5T120-170v-560q0-13 7.5-23t20.5-15l212-72 240 84 186-72q20-8 37 4.5t17 33.5v337q-15-23-35.5-42T760-528v-204l-120 46v126q-21 0-41 3.5T560-546v-140l-160-56v523l-226 87Zm26-96 120-46v-468l-120 40v474Zm496.5-32q22.5-20 23.5-60 1-34-22.5-57T640-400q-34 0-57 23t-23 57q0 34 23 57t57 23q34 0 56.5-20ZM640-160q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 23-5.5 43.5T778-238l102 102-56 56-102-102q-18 11-38.5 16.5T640-160ZM320-742v468-468Z"/></svg>
+                      </button>
 
-              //         {row.sendComand && (
-              //           <button onClick={() => handleSenComand(row.unit_id)} className="rounded-full bg-gray-500 px-3 py-1 text-xs text-white" title="Enviar comando" >
-              //             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000F5"><path d="m720-120-56-56 63-64H560v-80h167l-63-64 56-56 160 160-160 160Zm-600 0v-600q0-33 23.5-56.5T200-800h480q33 0 56.5 23.5T760-720v203q-10-2-20-2.5t-20-.5q-10 0-20 .5t-20 2.5v-203H200v400h283q-2 10-2.5 20t-.5 20q0 10 .5 20t2.5 20H240L120-120Zm160-440h320v-80H280v80Zm0 160h200v-80H280v80Zm-80 80v-400 400Z"/></svg>
-              //           </button>
-              //         )}
-              //       </div>
-              //     );
-              //   }
-              //   return value;
-              // }}
+                      {row.sendComand && (
+                        <button onClick={() => handleSenComand(row)} className="rounded-full  bg-[var(--accent)] px-3 py-1 text-xs text-white" title="Enviar comando" >
+                          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" ><path d="m720-120-56-56 63-64H560v-80h167l-63-64 56-56 160 160-160 160Zm-600 0v-600q0-33 23.5-56.5T200-800h480q33 0 56.5 23.5T760-720v203q-10-2-20-2.5t-20-.5q-10 0-20 .5t-20 2.5v-203H200v400h283q-2 10-2.5 20t-.5 20q0 10 .5 20t2.5 20H240L120-120Zm160-440h320v-80H280v80Zm0 160h200v-80H280v80Zm-80 80v-400 400Z"/></svg>
+                        </button>
+                      )}
+                    </div>
+                  );
+                }
+                return value;
+              }}
             />
           </div>
         </div>
       </div>
+
+      <ModalGeneric 
+        open={open}
+        handleClose = { () => setOpen(false) }
+      >
+        {childrenModal}
+      </ModalGeneric>        
     </div>
   );
 }
