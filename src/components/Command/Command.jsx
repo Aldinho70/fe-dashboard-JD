@@ -33,10 +33,8 @@ function Command({ name, fields }) {
     try {
       const confirmado = window.confirm(`¿Estás seguro de enviar el comando (${command_select.label}) a la unidad (${name}) ?`);
       if (!confirmado) return; // si cancela, no continúa con el envío
-
+      
       const response = await sendCommand(IDMET.value, command_select.value);
-      console.log(response);
-
       await new Promise((resolve) => setTimeout(resolve, 800)); // simulación
 
       setRespuesta({
@@ -126,7 +124,8 @@ function Command({ name, fields }) {
                 }`}
               >
                 {respuesta.texto}
-                {respuesta.response_meerkat_service}
+                <hr className="my-3"/>
+                {`Respuesta de meerkat api: ${respuesta.response_meerkat_service}`}
               </div>
             ) : (
               <span className="text-gray-500 text-sm">
