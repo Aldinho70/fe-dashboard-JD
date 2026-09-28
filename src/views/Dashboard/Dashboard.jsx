@@ -1,43 +1,41 @@
 import { useEffect, useState } from "react";
 import Map from '../../components/Map/Map.jsx'
 import useCountHRH from "../../hooks/useCountHRH.js";
-import useOfflineHRH from "../../hooks/useOfflineHRH.js";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import Command from "../../components/Command/Command.jsx";
-import useUnitsOffline from "../../hooks/useCountOffline.js";
 import Loading from "../../components/ui/Loading/Loading.jsx";
 import dashboardHelper from "../../helpers/Dashboard.helper.js";
 import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
 import TableUnits from "../../components/ui/TableUnits/TableUnits.jsx";
+import useCountUnitsOffline from "../../hooks/useCountUnitsOffline.js";
 import OperationGroups from "../../components/OperationGroups/OperationGroups.jsx";
 import ButtonOperation from "../../components/ui/ButtonOperation/ButtonOperation.jsx";
 import ModalGeneric, { VoidModal } from "../../components/ui/ModalGeneric/ModalGeneric.jsx";
 
 function Dashboard() {
-  const [tableRows, setTableRows] = useState([]);
-  const [tableColumns, setTableColumns] = useState([]);
-  const [selectedOperation, setSelectedOperation] = useState("");
-  
-  const { countUnits, loading: loadingUnits } = useCountUnitsGroups();
-  const { unitsOffline: offlineFilsa, loading: loadingFilsa } = useUnitsOffline("FILSA");
-  const { unitsOffline: offlineNoelie, loading: loadingNoelie } = useUnitsOffline("NOELIE");
-  const { unitsOffline: offlineHRH, loading: loadingOfflineHRH } = useOfflineHRH("GRUPO HRH");
-  const { unitsOffline: offlineDifeyro, loading: loadingDifeyro } = useUnitsOffline("DIFEYRO");
-  const { unitsOffline: offlineDifDobles, loading: loadingDifDobles } = useUnitsOffline("00-DIFEYRO SEGURIDAD",);
 
   const [ open, setOpen ] = useState(false);
-  const { dataHRH, loading: loadingHRH } = useCountHRH();
+  const [tableRows, setTableRows] = useState([]);
+  const [tableColumns, setTableColumns] = useState([]);
   const [loadingTable, setLoadingTable] = useState(false);
+  const [selectedOperation, setSelectedOperation] = useState("");
   const [ childrenModal, setChildrenModal ] = useState( VoidModal() )
-
   const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
 
-  const loadingButtons = loadingUnits || loadingNoelie || loadingDifeyro || loadingDifDobles || loadingFilsa || loadingOfflineHRH || loadingHRH;
+  // NOELIE, DIFEYRO Y FILSA
+  const { countUnits, loading: loadingUnits } = useCountUnitsGroups();
+  const { groups: groupsOffline, loading: loadingGroupsOffline } = useCountUnitsOffline(["NOELIE", "DIFEYRO", "FILSA", "00-DIFEYRO SEGURIDAD"]);
+  
+  // HRH
+  const { dataHRH, loading: loadingHRH } = useCountHRH();
+  const { groups: groupsOfflineHRH, loading: loadingGroupsOfflineHRH } = useCountUnitsOffline(["GRUPO HRH"], 'HRH');
 
+  const loadingButtons = loadingUnits || loadingGroupsOffline || loadingHRH || loadingGroupsOfflineHRH;
+  
   useEffect(() => {
     setDismissedOfflineAlerts(new Set());
-  }, [offlineNoelie, offlineDifeyro, offlineDifDobles, offlineFilsa, offlineHRH]);
+  }, [groupsOfflineHRH]);
 
   const dismissOfflineAlert = (idButton) => {
     setDismissedOfflineAlerts((dismissedAlerts) => {
@@ -134,17 +132,17 @@ function Dashboard() {
                 nameOperation={"Noelie"}
                 length={countUnits["NOELIE"] || 0}
                 gradientClass="gradient-green"
-                img="../logojd.png"
+                img={groupsOffline["NOELIE"]?.icon ?? "../logojd.png"}
                 onClick={() => handleClickNDF("General", "NOELIE")}
               />
               <ButtonOperation
                 id="btn-offline-noelie"
                 nameOperation={"Sin conexion"}
-                length={offlineNoelie.length ?? 0}
-                gradientClass={offlineNoelie.length > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
+                length={ groupsOffline["NOELIE"]?.count ?? 0}
+                gradientClass={groupsOffline["NOELIE"]?.count > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
                 type="offline"
                 onClick={() =>
-                  handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", offlineNoelie)
+                  handleClickNDF("Unidades sin conexion", "Noelie", "btn-offline-noelie", groupsOffline["NOELIE"]?.units)
                 }
               />
               <ButtonOperation
@@ -173,28 +171,8 @@ function Dashboard() {
                 nameOperation={"Difeyro"}
                 length={countUnits["DIFEYRO"] || 0}
                 gradientClass="gradient-purple"
-                img="../logojd.png"
+                img={groupsOffline["DIFEYRO"]?.icon ?? "../logojd.png"}
                 onClick={() => handleClickNDF("General", "DIFEYRO")}
-              />
-              <ButtonOperation
-                id="btn-offline-difeyro"
-                nameOperation={"Sin conexion"}
-                length={offlineDifeyro.length ?? 0}
-                gradientClass={offlineDifeyro.length > 0 && !dismissedOfflineAlerts.has("btn-offline-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
-                type="offline"
-                onClick={() =>
-                  handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", offlineDifeyro, )
-                }
-              />
-              <ButtonOperation
-                id="btn-offline-doble-difeyro"
-                nameOperation={"Dobles S/R"}
-                length={offlineDifDobles.length ?? 0}
-                gradientClass={offlineDifDobles.length > 0 && !dismissedOfflineAlerts.has("btn-offline-doble-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
-                type="offline"
-                onClick={() =>
-                  handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", offlineDifDobles)
-                }
               />
               <ButtonOperation
                 nameOperation={"Costco"}
@@ -202,6 +180,26 @@ function Dashboard() {
                 gradientClass="gradient-temp"
                 img="https://pngate.com/wp-content/uploads/2025/04/costco-logo-main-2025-blue-red-horizontal-1.png"
                 onClick={() => handleClickNDF("Costco", "DIFEYRO MIGRACION MEERKAT")}
+              />
+              <ButtonOperation
+                id="btn-offline-difeyro"
+                nameOperation={"Sin conexion"}
+                length={ groupsOffline["DIFEYRO"]?.count ?? 0 }
+                gradientClass={ groupsOffline["DIFEYRO"]?.count > 0 && !dismissedOfflineAlerts.has("btn-offline-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
+                type="offline"
+                onClick={() =>
+                  handleClickNDF( "unidades sin conexion", "Difeyro", "btn-offline-difeyro", groupsOffline["DIFEYRO"]?.units )
+                }
+              />
+              <ButtonOperation
+                id="btn-offline-doble-difeyro"
+                nameOperation={"Dobles S/R"}
+                length={ groupsOffline["00-DIFEYRO SEGURIDAD"]?.count ?? 0 }
+                gradientClass={groupsOffline["00-DIFEYRO SEGURIDAD"]?.count > 0 && !dismissedOfflineAlerts.has("btn-offline-doble-difeyro") ? "gradient-sn-animation" : "gradient-sn"}
+                type="offline"
+                onClick={() =>
+                  handleClickNDF("Dobles S/R", "Difeyro", "btn-offline-doble-difeyro", groupsOffline["00-DIFEYRO SEGURIDAD"]?.units )
+                }
               />
             </OperationGroups>
           </div>
@@ -213,17 +211,17 @@ function Dashboard() {
                 nameOperation={"Filsa"}
                 length={countUnits["FILSA"] || 0}
                 gradientClass="gradient-orange"
-                img="../logojd.png"
+                img={groupsOffline["FILSA"]?.icon ?? "../logojd.png"}
                 onClick={() => handleClickNDF("General", "FILSA")}
               />
               <ButtonOperation
                 id="btn-offline-filsa"
                 nameOperation={"Sin conexion"}
-                length={offlineFilsa.length ?? 0}
-                gradientClass={offlineFilsa.length > 0 && !dismissedOfflineAlerts.has("btn-offline-filsa") ? "gradient-sn-animation" : "gradient-sn"}
+                length={ groupsOffline["FILSA"]?.count ?? 0 }
+                gradientClass={groupsOffline["FILSA"]?.count > 0 && !dismissedOfflineAlerts.has("btn-offline-filsa") ? "gradient-sn-animation" : "gradient-sn"}
                 type="offline"
                 onClick={() =>
-                  handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", offlineFilsa)
+                  handleClickNDF("unidades sin conexion", "Filsa", "btn-offline-filsa", groupsOffline["FILSA"]?.units)
                 }
               />
               <ButtonOperation
@@ -262,10 +260,10 @@ function Dashboard() {
                 <ButtonOperation
                   id="btn-offline-hrh"
                   nameOperation="S/Conexion"
-                  length={offlineHRH.length ?? 0}
-                  gradientClass={offlineHRH.length > 0 && !dismissedOfflineAlerts.has("btn-offline-hrh") ? "gradient-sn-animation" : "gradient-sn"}
+                  length={groupsOfflineHRH['GRUPO HRH']?.count ?? 0}
+                  gradientClass={groupsOfflineHRH['GRUPO HRH']?.count > 0 && !dismissedOfflineAlerts.has("btn-offline-hrh") ? "gradient-sn-animation" : "gradient-sn"}
                   type="offline"
-                  onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", offlineHRH)}
+                  onClick={() => handleClickHRH("S/Conexion", "GRUPO_HRH", "btn-offline-hrh", groupsOfflineHRH['GRUPO HRH']?.units)}
                 />
 
                 <ButtonOperation

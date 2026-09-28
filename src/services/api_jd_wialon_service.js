@@ -48,6 +48,25 @@ class ApiJdService {
         }
     }
 
+    async getCountUnitsOfflineGroups ( groups = "all", account = "DFN" ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+        const url = `${this.BASE_URL_API_JD}get/count/data/offline/groups`;
+
+        try {
+            const response = await AxiosService.post( 
+                url, 
+                {
+                    "token": token,
+                    "groups": groups
+                }
+             );
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }
 
 export default new ApiJdService();
