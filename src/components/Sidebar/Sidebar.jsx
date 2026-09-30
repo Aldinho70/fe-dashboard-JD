@@ -71,7 +71,7 @@ export default function Sidebar() {
 
             <div className="hidden md:flex flex-row items-center gap-2">
 
-              <Button className="cursor-pointer !rounded-2xl p-2 !text-[var(--app-text)] shadow-lg shadow-slate-950/20 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/50 hover:shadow-amber-950/40 button-radio " 
+              {/* <Button className="cursor-pointer !rounded-2xl p-2 !text-[var(--app-text)] shadow-lg shadow-slate-950/20 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--accent)]/50 hover:shadow-amber-950/40 button-radio " 
                 disabled
                 title="Proximamente"
               >
@@ -79,7 +79,7 @@ export default function Sidebar() {
                   <CircleNotificationsIcon />
                   Notificaciones
                 </span>
-              </Button>
+              </Button> */}
               {/* <Button color="inherit">Dashboard</Button> */}
               {/* <Button color="inherit">Reportes</Button> */}
 

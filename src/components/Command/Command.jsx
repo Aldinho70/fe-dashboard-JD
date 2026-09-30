@@ -54,7 +54,9 @@ function Command({ name, fields }) {
 
   return (
     <div className="flex justify-center items-center h-full">
+
       <div className="flex flex-col gap-2 w-full h-full">
+
         <div className="flex gap-3 justify-between items-center">
           <span className="font-bold text-2xl pb-1 text-gray-100">
             Envío de comandos
@@ -62,8 +64,10 @@ function Command({ name, fields }) {
         </div>
 
         <div className="flex flex-col w-full h-full items-start bg-gray-700 rounded-3xl overflow-hidden">
+
           {/* form */}
-          <div className="flex flex-wrap w-full items-center m-3 gap-4 bg-gray-800/60 p-4 rounded-2xl">
+          <div className="flex flex-col lg:flex-row lg:flex-wrap w-full justify-center items-center m-3 gap-4 bg-gray-800/60 p-4 rounded-2xl">
+
             <div className="flex flex-row gap-2 items-center text-base">
               <span className="font-medium text-gray-400">
                 Unidad a enviar comando
@@ -73,7 +77,7 @@ function Command({ name, fields }) {
               </span>
             </div>
 
-            <div className="flex flex-wrap gap-3 items-center border-s-2 border-gray-600 ps-5">
+            <div className="flex flex-wrap gap-3 items-center lg:border-s-2 border-gray-600 ps-5">
               <FormControl size="small" sx={{ minWidth: 220 }}>
                 <InputLabel
                   id="comando-label"

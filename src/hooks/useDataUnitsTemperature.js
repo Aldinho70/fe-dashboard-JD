@@ -28,7 +28,7 @@ const useDataUnitsTemperature = ( group, account = null ) => {
 
         const interval = setInterval ( () => {
             getDataUnitsTemperature();
-        }, 60000 );
+        }, 5 *60000 );
 
         return () => {
             clearInterval( interval );

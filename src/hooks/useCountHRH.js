@@ -40,7 +40,7 @@ const useCountHRH = () => {
 
         const interval = setInterval( () => {
             getDataHRH();
-        }, 60000)
+        }, 10 * 60000)
 
         return () => {
             clearInterval(interval);
