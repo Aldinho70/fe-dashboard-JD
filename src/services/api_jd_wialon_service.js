@@ -66,6 +66,21 @@ class ApiJdService {
         }
     }
 
+    async getUnitsFaildureTemperature ( group = 'all', account = 'DFN' ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+
+        const url = `${this.BASE_URL_API_JD}get/units/failure/temperature/group/${group}/${token}`;
+
+        try {
+            
+            const response = await AxiosService.get(  url  );
+            return response;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
 }
 

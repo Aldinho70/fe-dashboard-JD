@@ -74,6 +74,38 @@ const dashboardHelper = {
                 { id: "handleActions", label: "Acciones" },
             ],
         }
+    },
+
+    async createContentTableTemperatura( group, data = null ) {
+        const rows = ( data ?? [] ).map( (unit) => {
+            const { _parameters = [] } = unit;
+
+            const parameters = _parameters.reduce( (acc, param, index) => {
+                acc[`param${index}`] = param.value;
+                return acc;
+            }, {} );
+
+            return {
+                unit: unit.name,
+                ...parameters,
+            }
+        })
+
+        const temperatureCount = rows.reduce( (max, row) => {
+            const count = Object.keys( row ).filter( key => key.startsWith( 'param' ) ).length;
+            return Math.max( max, count );
+        }, 0 );
+
+        return{
+            rows,
+            columns: [
+                { id: "unit", label: "Unidad" },
+                ...Array.from( { length: temperatureCount }, ( _, index ) => ({
+                    id: `param${index}`,
+                    label: `Temperatura ${index + 1}`,
+                }) ),
+            ],
+        }
     }
 
 }

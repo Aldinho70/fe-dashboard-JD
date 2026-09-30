@@ -9,6 +9,7 @@ import dashboardHelper from "../../helpers/Dashboard.helper.js";
 import useCountUnitsGroups from "../../hooks/useCountUnitsGroup.js";
 import TableUnits from "../../components/ui/TableUnits/TableUnits.jsx";
 import useCountUnitsOffline from "../../hooks/useCountUnitsOffline.js";
+import useDataUnitsTemperature from "../../hooks/useDataUnitsTemperature.js";
 import OperationGroups from "../../components/OperationGroups/OperationGroups.jsx";
 import ButtonOperation from "../../components/ui/ButtonOperation/ButtonOperation.jsx";
 import ModalGeneric, { VoidModal } from "../../components/ui/ModalGeneric/ModalGeneric.jsx";
@@ -20,7 +21,7 @@ function Dashboard() {
   const [tableColumns, setTableColumns] = useState([]);
   const [loadingTable, setLoadingTable] = useState(false);
   const [selectedOperation, setSelectedOperation] = useState("");
-  const [ childrenModal, setChildrenModal ] = useState( VoidModal() )
+  const [childrenModal, setChildrenModal] = useState( VoidModal() )
   const [dismissedOfflineAlerts, setDismissedOfflineAlerts] = useState(new Set());
 
   // NOELIE, DIFEYRO Y FILSA
@@ -30,6 +31,9 @@ function Dashboard() {
   // HRH
   const { dataHRH, loading: loadingHRH } = useCountHRH();
   const { groups: groupsOfflineHRH, loading: loadingGroupsOfflineHRH } = useCountUnitsOffline(["GRUPO HRH"], 'HRH');
+
+  //Temperatura
+  const { units: unitsFailureTemp } = useDataUnitsTemperature( 'NAVES NOELIE' ); 
 
   const loadingButtons = loadingUnits || loadingGroupsOffline || loadingHRH || loadingGroupsOfflineHRH;
   
@@ -54,11 +58,13 @@ function Dashboard() {
     setLoadingTable(true);
 
     try {
-      const { rows, columns } = await dashboardHelper.createContentTable(
-        nameOperation,
-        nameGroup,
-        data,
-      );
+
+
+        const { rows, columns } = 
+        ( nameOperation == 'Temperatura' ) 
+          ? await dashboardHelper.createContentTableTemperatura( nameGroup, data )
+          : await dashboardHelper.createContentTable( nameOperation, nameGroup, data )
+
 
       setSelectedOperation(`: ${nameGroup} > ${nameOperation}`);
       setTableRows(rows);
@@ -90,6 +96,7 @@ function Dashboard() {
       setLoadingTable(false);
     }
   };
+
 
   const handleViewMap = async ( unit ) => {
     setOpen(true);
@@ -155,11 +162,12 @@ function Dashboard() {
                 }
               />
               <ButtonOperation
+                id="btn-offline-naves-noelie"
                 nameOperation={"Temperatura"}
-                length={0}
-                gradientClass="gradient-temp"
+                length={ unitsFailureTemp.length ?? 0}
+                gradientClass={unitsFailureTemp.length > 0 && !dismissedOfflineAlerts.has("btn-offline-noelie") ? "gradient-sn-animation" : "gradient-sn"}
                 type="tem"
-                onClick={() => handleClickNDF("Temperatura", "NOELIE")}
+                onClick={() => handleClickNDF("Temperatura", "Naves Noelie", 'btn-offline-naves-noelie', unitsFailureTemp)}
               />
             </OperationGroups>
           </div>
