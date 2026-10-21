@@ -5,6 +5,7 @@ const dashboardHelper = {
 
     async createContentTable( operation, group, data = null ) {
         let units = [];
+        // let coords = [];
 
         if( !data && operation != 'Temperatura' ){
             const dataGroup = await api_jd_wialon_service.getGroup( group );
@@ -17,16 +18,27 @@ const dashboardHelper = {
             units = data;
         }
 
-        const rows = units.map( unit => {
+        const coords = units.map( unit => {
+            const { last_message } = unit;
+            return { lat: last_message.position?.latitude || 25, lon: last_message.position?.longitude || -103 }
+        })
+
+        const directions = await api_jd_wialon_service.getDirections( coords );
+
+        const rows = units.map( (unit, index) => {
             const { last_message, fields } = unit;
+            
             return{
                 unit: unit.name,
                 unit_id: unit.id,
-                lastMessage: parseTimestamp( last_message.timestamp ),
+                // lastMessage: parseTimestamp( last_message.timestamp ),
+                lastMessage: unit.position?.date_long  || parseTimestamp( last_message.timestamp ),
                 last_message,
                 fields,
-                direction: 'Ruta desconocida',
-                connection: 'Conexion desconocida',
+                direction: directions[index],
+                connection: (unit?.network_connection) 
+                    ? ( unit?.network_connection == 'Online' ) ? '🟢 En vivo' : ' 🔴 Sin conexion'
+                    : ' 🔴 Sin conexion',
                 sendComand: ( operation == 'Costco' ) ? true : false,
             }
         })

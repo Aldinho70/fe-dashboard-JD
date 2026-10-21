@@ -56,9 +56,8 @@ export default function TableUnits({
                         : value;
 
                     return (
-                      <td
-                        key={column.id}
-                        className={`px-4 py-0 text-[var(--muted-text)] ${alignmentClasses[column.align] ?? "text-left"} ${column.cellClassName ?? ""}`}
+                      <td key={column.id}
+                        className={`px-2 py-0 text-[var(--muted-text)] ${alignmentClasses[column.align] ?? "text-left"} ${column.cellClassName ?? ""} `}
                       >
                         {content}
                       </td>

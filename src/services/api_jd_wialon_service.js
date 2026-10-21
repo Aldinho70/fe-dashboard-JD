@@ -81,6 +81,20 @@ class ApiJdService {
         }
     }
 
+    async getDirections ( coords, account = 'DFN' ) {
+        const token = ( account == 'HRH' ) ? this.TOKEN_HRH : this.TOKEN_DFN;
+
+        const url = `${this.BASE_URL_API_JD}get/direction/coords`;
+
+        try {
+            
+            const response = await AxiosService.post(  url, { token, coords } );
+            return response;
+
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 
