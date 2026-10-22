@@ -4,6 +4,13 @@ import api_jd_wialon_service from "../services/api_jd_wialon_service";
 const dashboardHelper = {
 
     async createContentTable( operation, group, data = null ) {
+        const statusMap = {
+            offline: ' 🛜 Offline',
+            ralenti: ' 🛑 Ralenti',
+            apagado: ' 📴 Apagado',
+            movimiento: ' 🚦 Movimiento',
+            desconocido: ' ⁉️ Desconocido',
+        }
         let units = [];
         // let coords = [];
 
@@ -26,13 +33,13 @@ const dashboardHelper = {
         const directions = await api_jd_wialon_service.getDirections( coords );
 
         const rows = units.map( (unit, index) => {
-            const { last_message, fields } = unit;
+            const { last_message, fields, state } = unit;
             
             return{
                 unit: unit.name,
                 unit_id: unit.id,
-                // lastMessage: parseTimestamp( last_message.timestamp ),
                 lastMessage: unit.position?.date_long  || parseTimestamp( last_message.timestamp ),
+                state: statusMap[unit?.state] || statusMap['desconocido'],
                 last_message,
                 fields,
                 direction: directions[index],
@@ -50,6 +57,7 @@ const dashboardHelper = {
                 { id: "lastMessage", label: "Ultimo mensaje" },
                 { id: "direction", label: "Direccion" },
                 { id: "connection", label: "Conexion" },
+                { id: "state", label: "Estado" },
                 { id: "handleActions", label: "Acciones" },
             ],
         }
