@@ -28,9 +28,10 @@ function CardOperation({ id, nameOperation, length, gradientClass = "", onClick,
       classTextColor: "!text-indigo-700",
       label: "Desviación",
     },
-
+    
     default: {
       icon: <Brightness1Icon />,
+      classTextColor: "!text-[var(--app-text)]",
       classCss: "!bg-white/15",
       label: "default",
     },

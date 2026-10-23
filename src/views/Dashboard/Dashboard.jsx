@@ -156,7 +156,7 @@ function Dashboard() {
               />
               <ButtonOperation
                 nameOperation={"Desviados"}
-                length={countUnits["Z - DESVIADOS NOELIE"]}
+                length={countUnits["Z - DESVIADOS NOELIE"] ?? 0}
                 textDescription="Desviados de ruta"
                 gradientClass="gradient-blue"
                 type="desv"
