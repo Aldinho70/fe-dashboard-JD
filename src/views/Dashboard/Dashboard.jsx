@@ -226,7 +226,7 @@ function Dashboard() {
               <ButtonOperation
                 nameOperation={"Filsa"}
                 length={countUnits["FILSA"] || 0}
-                textDescription="Operacion principal"
+                textDescription="Operacion general"
                 gradientClass="gradient-orange"
                 img={groupsOffline["FILSA"]?.icon ?? "../logojd.png"}
                 onClick={() => handleClickNDF("General", "FILSA")}
